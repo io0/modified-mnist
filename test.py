@@ -58,7 +58,7 @@ class Network():
     def run_training(self):
         for i in range (0, 100):
             self.forward_pass(self.input[i])
-            self.back_propagate(self.input[i], self.output[i], 0.00002)
+            self.back_propagate(self.input[i], self.output[i], 0.0002)
             self.print_error(self.output[i])
         
     def forward_pass(self, input):
@@ -78,12 +78,13 @@ class Network():
         h_delta = np.matmul(self.wo, o_delta) * self.h_output * (1 - self.h_output)
         h_update = np.asarray([h_delta[:-1] * x for x in input])
         
-        self.wo = self.wo + learning_rate * o_update
-        self.wi = self.wi + learning_rate * h_update
+        self.wo = self.wo - learning_rate * o_update
+        self.wi = self.wi - learning_rate * h_update
         
     def print_error(self,output):
+        print (np.argmax(self.o_output))
+        print (np.argmax(output))
         E = output * np.vectorize(log)(self.o_output) + (1 - output)*np.vectorize(log)(1 - self.o_output)
-        print(np.max(E))
         E = 0 - np.sum(E)/40.0
         print(E)
         
